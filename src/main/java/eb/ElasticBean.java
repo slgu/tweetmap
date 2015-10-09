@@ -26,15 +26,17 @@ public class ElasticBean {
         eb = new AWSElasticBeanstalkClient(credentials);
         s3 = new AmazonS3Client();
     }
-
-    public void setup(String appName, String appDesc, String envName, String envDesc) throws IOException {
+    public void setinfo(String appName, String appDesc, String envName, String envDesc) {
         this.appName = appName;
         this.appDesc = appDesc;
         this.envName = envName;
         this.envDesc = envDesc;
+    }
+    public void setup() throws IOException {
         //create application
         eb.createApplication(new CreateApplicationRequest().
                 withApplicationName(appName).withDescription(appDesc));
+
 
         //create environment
         eb.createEnvironment(new CreateEnvironmentRequest().withEnvironmentName(envName)
@@ -42,7 +44,25 @@ public class ElasticBean {
                 .withSolutionStackName("32bit Amazon Linux running Tomcat 7")
                 .withDescription(envDesc));
     }
-    public void deploy(String appVersionDesc) throws IOException{
+    public void deploy(String appVersionDesc) throws IOException, InterruptedException{
+        //check health
+        while (true) {
+            //every 4 seconds check or will get exception
+            Thread.sleep(1000);
+            DescribeEnvironmentsResult res = eb.describeEnvironments(new DescribeEnvironmentsRequest()
+                    .withApplicationName(appName));
+            boolean flg = false;
+            for (EnvironmentDescription desc: res.getEnvironments()) {
+                System.out.println(desc.getEnvironmentName() + "," + desc.getStatus());
+                if (desc.getStatus().equals("Ready")) {
+                    //OK
+                    flg = true;
+                    break;
+                }
+            }
+            if (flg)
+                break;
+        }
         //create S3 storage to upload the web files
         File f = new File(appPath);
         String fileName = f.getName();
@@ -72,12 +92,20 @@ public class ElasticBean {
     public static void main(String[] args) {
         ElasticBean proxyer = new ElasticBean();
         try {
+            System.out.println("init sdk");
             proxyer.init();
-            proxyer.setup("tweetmap1", "slgu@tweetmap", "tomcat7", "slgu@tomcat7");
+            System.out.println("set info");
+            proxyer.setinfo("tweetmap1", "slgu@tweetmap", "tomcat71", "slgu@tomcat7");
+            System.out.println("begin setup");
+            //proxyer.setup();
             //wait for ready
+            System.out.println("begin deploy");
             proxyer.deploy("update test application");
         }
         catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
