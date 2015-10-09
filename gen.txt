@@ -15,3 +15,6 @@
           </plugins>
 3. deploy
  mvn tomcat7:deploy
+
+4. add jar
+ mvn install:install-file -Dfile=postgresql-9.4-1203.jdbc4.jar -DgroupId=org.postgresql -Dversion=9.4 -DartifactId=postgresql -Dpackaging=jar
