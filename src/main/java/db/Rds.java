@@ -18,7 +18,7 @@ public class Rds {
         Class.forName("org.postgresql.Driver");
         Properties props = new Properties();
         props.setProperty("user","slgu");
-        props.setProperty("password", "!GSLkobe31413");
+        props.setProperty("password", "*******");
         conn = DriverManager.getConnection(JDBC_URL, props);
     }
 
