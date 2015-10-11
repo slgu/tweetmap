@@ -1,6 +1,9 @@
 package db;
 
+import com.google.gson.Gson;
+
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by slgu1 on 10/9/15.
@@ -58,7 +61,16 @@ public class Tweet {
     public String toString() {
         return String.valueOf(lontitude) + "," + String.valueOf(latitude);
     }
-
+    public HashMap <String, String> toMap() {
+        HashMap <String, String> res = new HashMap<String, String>();
+        res.put("id",id);
+        res.put("lon",String.valueOf(lontitude));
+        res.put("lat",String.valueOf(latitude));
+        res.put("date",String.valueOf(createTime));
+        res.put("username",userName);
+        res.put("text",text);
+        return res;
+    }
     private double lontitude;
     private double latitude;
     private String id;

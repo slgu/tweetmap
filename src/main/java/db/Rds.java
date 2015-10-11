@@ -1,7 +1,9 @@
 package db;
 
 import com.amazonaws.services.simpleworkflow.flow.Suspendable;
+import javafx.scene.control.Tab;
 
+import javax.swing.plaf.nimbus.State;
 import javax.xml.transform.Result;
 import java.io.*;
 import java.sql.Date;
@@ -18,10 +20,13 @@ public class Rds {
         Class.forName("org.postgresql.Driver");
         Properties props = new Properties();
         props.setProperty("user","slgu");
-        props.setProperty("password", "*******");
+        props.setProperty("password", "12345678");
         conn = DriverManager.getConnection(JDBC_URL, props);
     }
 
+    public void close() throws SQLException{
+        conn.close();
+    }
     public void createTable() throws SQLException{
         Statement st = conn.createStatement();
         String createString =
@@ -84,9 +89,13 @@ public class Rds {
         }
         return resultList;
     }
+    public void clearDb() throws SQLException{
+        Statement st = conn.createStatement();
+        st.execute(String.format("delete from %s", TABLE_NAME));
+    }
     public void loadFromLocal(String filename) throws FileNotFoundException, SQLException, IOException{
-        final String beginString = "@x@x@x233:";
-        final String splitString = ":@x@x@x:";
+        final String beginString = "\n";
+        final String splitString = "@x@x@x";
         FileInputStream input = new FileInputStream(filename);
         int num = input.available();
         byte [] buffer = new byte[num];
@@ -104,6 +113,7 @@ public class Rds {
                 t.setLontitude(Double.parseDouble(infoArr[3]));
                 t.setLatitude(Double.parseDouble(infoArr[4]));
                 t.setText(infoArr[5]);
+                System.out.println(t);
                 try {
                     insertTweet(t);
                 }
@@ -118,11 +128,8 @@ public class Rds {
         Rds rds = new Rds();
         try {
             rds.init();
-            //rds.loadFromLocal("data/tweet.txt");
-            LinkedList <Tweet> res = rds.getAll();
-            for (Tweet t: res) {
-                System.out.println(t);
-            }
+            //rds.clearDb();
+            rds.loadFromLocal("data/food_test.txt");
             //rds.createTable();
             /*
             Tweet t = new Tweet();
