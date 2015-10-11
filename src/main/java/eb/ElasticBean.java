@@ -97,7 +97,7 @@ public class ElasticBean {
             System.out.println("set info");
             proxyer.setinfo("tweetmap1", "slgu@tweetmap", "tomcat71", "slgu@tomcat7");
             System.out.println("begin setup");
-            //proxyer.setup();
+            proxyer.setup();
             //wait for ready
             System.out.println("begin deploy");
             proxyer.deploy("update test application");

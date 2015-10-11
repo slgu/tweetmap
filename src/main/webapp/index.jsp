@@ -20,9 +20,12 @@
         var tweetData;
         var ws;
         var realTimeInfo = [];
+        var received_msg;
         //realTimeInfo[idx][0] is context
         //realTimeInfo[idx][1] is string of author place time
         function generate() {
+            //clean first
+            $("#realtime").html("");
             for (idx in realTimeInfo) {
                 var blockquote = $("<blockquote/>");
                 $("<p/>").html(realTimeInfo[idx][0]).appendTo(blockquote);
@@ -47,30 +50,34 @@
                 heatmap.setMap(map);
             } );
         }
+        function wssend() {
+            ws.send("get");
+        }
         function realtime() {
             $("#category").hide();
             $("#realtime").show();
             generate();
             heatmap.setMap(null);
             ws = new WebSocket("ws://localhost:8080/tweetmap/push");
+            window.setInterval(wssend, 3000);
             ws.onopen = function()
             {
                 // Web Socket is connected, send data using send()
-                ws.send("get");
+                wssend();
             };
 
             ws.onmessage = function (evt)
             {
-                var received_msg = evt.data;
-                alert(received_msg);
+                received_msg = JSON.parse(evt.data);
                 var lat = parseFloat(received_msg.lat);
                 var lon = parseFloat(received_msg.lon);
-                var marker = new google.maps.MarKer({
-                    position: new google.maps.LatLng(lat, long),
-                    map: map,
-                    titile: "hello world"
-                });
-                ws.send("get");
+                console.log(received_msg["text"]);
+                console.log(received_msg["username"]);
+                realTimeInfo.push([received_msg["text"], received_msg["username"]]);
+                if (realTimeInfo.length > 4) {
+                    realTimeInfo.shift();
+                }
+                generate();
             };
 
             ws.onclose = function()
@@ -116,18 +123,6 @@
             </div>
         </div>
         <div id="realtime" style="display: none">
-            <blockquote>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
-            </blockquote>
-            <blockquote>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
-            </blockquote>
-            <blockquote>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
-            </blockquote>
         </div>
     </div>
     <div class="col-md-9">
