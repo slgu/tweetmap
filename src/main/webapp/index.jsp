@@ -19,7 +19,20 @@
         var heatmap;
         var tweetData;
         var ws;
+        var realTimeInfo = [];
+        //realTimeInfo[idx][0] is context
+        //realTimeInfo[idx][1] is string of author place time
+        function generate() {
+            for (idx in realTimeInfo) {
+                var blockquote = $("<blockquote/>");
+                $("<p/>").html(realTimeInfo[idx][0]).appendTo(blockquote);
+                $("<footer/>").html(realTimeInfo[idx][1]).appendTo(blockquote);
+                blockquote.appendTo($("#realtime"));
+            }
+        }
         function overview() {
+            $("#category").show();
+            $("#realtime").hide();
             $.get("getdata", function (data,status) {
                 heatmap.setMap(null);
                 heat_map_data = [];
@@ -35,6 +48,9 @@
             } );
         }
         function realtime() {
+            $("#category").hide();
+            $("#realtime").show();
+            generate();
             heatmap.setMap(null);
             ws = new WebSocket("ws://localhost:8080/tweetmap/push");
             ws.onopen = function()
@@ -84,23 +100,39 @@
             <button type="button" class="btn btn-default" onclick="overview()">Overview</button>
             <button type="button" class="btn btn-default" onclick="realtime()">Real-Time</button>
         </div>
-        <div><h3>Choose Category to be shown in Map</h3></div>
-        <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Category
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a href="#">Food</a></li>
-                <li><a href="#">Music</a></li>
-                <li><a href="#">Sport</a></li>
-                <li><a href="#">health</a></li>
-            </ul>
+        <div id="category">
+            <div><h3>Choose Category to be shown in Map</h3></div>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Category
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">Food</a></li>
+                    <li><a href="#">Music</a></li>
+                    <li><a href="#">Sport</a></li>
+                    <li><a href="#">health</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="realtime" style="display: none">
+            <blockquote>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
+            </blockquote>
+            <blockquote>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
+            </blockquote>
+            <blockquote>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
+            </blockquote>
         </div>
     </div>
     <div class="col-md-9">
         <div id="googleMap" style="width:1000px;height:770px;"></div>
     </div>
-</div>>
+</div>
 </body>
 </html>
