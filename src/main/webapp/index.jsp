@@ -47,6 +47,13 @@
             {
                 var received_msg = evt.data;
                 alert(received_msg);
+                var lat = parseFloat(received_msg.lat);
+                var lon = parseFloat(received_msg.lon);
+                var marker = new google.maps.MarKer({
+                    position: new google.maps.LatLng(lat, long),
+                    map: map,
+                    titile: "hello world"
+                });
                 ws.send("get");
             };
 

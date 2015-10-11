@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
 import db.Tweet;
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
@@ -29,14 +30,8 @@ public class PushServlet {
 
     @OnMessage
     public String echo(String message) {
-        try {
-            TweetStream.initService();
-        }
-        catch (IOException e) {
-
-        }
         Tweet tweet = TweetStream.queue.pop();
-        return tweet.toString();
+        return new Gson().toJson(tweet.toMap());
     }
 
     @OnError

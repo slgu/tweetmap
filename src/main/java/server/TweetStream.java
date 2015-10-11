@@ -16,11 +16,16 @@ import twitter4j.conf.ConfigurationBuilder;
  * Created by slgu1 on 10/10/15.
  */
 public class TweetStream {
-    static java.util.logging.Logger log = Logger.getLogger("/Users/slgu1/aws/tweetmap/log/my.log");
     static public BlockingDeque <Tweet> queue = new LinkedBlockingDeque<Tweet>();
     static boolean flg = false;
+    static int MAXN_LENGTH = 1000;
     static {
-        log.setLevel(Level.INFO);
+        try {
+            initService();
+        }
+        catch (Exception e) {
+
+        }
     }
     public static void initService() throws IOException{
         if (flg)
@@ -28,18 +33,18 @@ public class TweetStream {
         if (!flg) {
             flg = true;
         }
-        log.info("init service");
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("ccl8yPcBzA96vzSizxYTBCCak")
-                .setOAuthConsumerSecret("XiM2kubxM3llaKLnnW6QsA2aLk3cqqGuZg3Xe7JawkFnTUC97t")
+                .setOAuthConsumerKey("tmMiHJXxZOsHQXkYRnSfyYdzs")
+                .setOAuthConsumerSecret("4KmYFygveyQzEqTAjFrVSvMMlBP64W6miaCmBxD4RZKQUZfASZ")
                 .setOAuthAccessToken("1302870493-9OKfaOYCscgiOPZw9i2vLuEsaaY5iyI7noL3hIN")
                 .setOAuthAccessTokenSecret("F41VB5udxlqcDHpn884HntFMdrI6OrrZwMfIWShzImMkI");
         /**/
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         StatusListener listener = new StatusListener() {
             public void onStatus(Status status){
-                log.info(status.getLang());
+                if (queue.size() >= MAXN_LENGTH)
+                    return;
                 String splitString = "@x@x@x";
                 String username = status.getUser().getScreenName();
                 double lontitude = -1, latitude = -1;
@@ -112,7 +117,6 @@ public class TweetStream {
     public static void main(String [] args) throws IOException{
         TweetStream.initService();
         while (true) {
-
         }
     }
 }
