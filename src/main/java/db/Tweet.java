@@ -69,6 +69,7 @@ public class Tweet {
         res.put("date",String.valueOf(createTime));
         res.put("username",userName);
         res.put("text",text);
+        res.put("category", category);
         return res;
     }
     private double lontitude;
@@ -77,4 +78,14 @@ public class Tweet {
     private String userName;
     private Date createTime;
     private String text;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    private String category = "NULL";
 }

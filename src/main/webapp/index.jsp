@@ -20,7 +20,7 @@
         var tweetData;
         var ws;
         var realTimeInfo = [];
-        var received_msg;
+        var markers = [];
         //realTimeInfo[idx][0] is context
         //realTimeInfo[idx][1] is string of author place time
         function generate() {
@@ -33,12 +33,25 @@
                 blockquote.appendTo($("#realtime"));
             }
         }
+        function removeMarker() {
+            for (idx in markers) {
+                markers[idx].setMap(null);
+            }
+            markers = [];
+        }
         function overview() {
+            //init overview tab
+            if (ws != undefined) {
+                ws.close();
+            }
+            removeMarker();
             $("#category").show();
             $("#realtime").hide();
-            $.get("getdata", function (data,status) {
-                heatmap.setMap(null);
-                heat_map_data = [];
+        }
+        function getdata(category) {
+            heatmap.setMap(null);
+            heat_map_data = [];
+            $.get("getdata?type=" + category, function (data,status) {
                 tweetData = data;
                 for (idx in tweetData) {
                     var item = tweetData[idx];
@@ -51,15 +64,19 @@
             } );
         }
         function wssend() {
-            ws.send("get");
+            if (ws.readyState == ws.OPEN) {
+                ws.send("get");
+            }
         }
         function realtime() {
             $("#category").hide();
             $("#realtime").show();
+            //init realtime
+            realTimeInfo = [];
             generate();
             heatmap.setMap(null);
             ws = new WebSocket("ws://localhost:8080/tweetmap/push");
-            window.setInterval(wssend, 3000);
+            window.setInterval(wssend, 4000);
             ws.onopen = function()
             {
                 // Web Socket is connected, send data using send()
@@ -68,15 +85,24 @@
 
             ws.onmessage = function (evt)
             {
-                received_msg = JSON.parse(evt.data);
+                var received_msg = JSON.parse(evt.data);
                 var lat = parseFloat(received_msg.lat);
                 var lon = parseFloat(received_msg.lon);
                 console.log(received_msg["text"]);
                 console.log(received_msg["username"]);
-                realTimeInfo.push([received_msg["text"], received_msg["username"]]);
+                var string = received_msg["username"] + " " + received_msg["lat"] + " " +
+                                received_msg["lon"];
+                realTimeInfo.push([received_msg["text"], string]);
                 if (realTimeInfo.length > 4) {
                     realTimeInfo.shift();
                 }
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(parseFloat(received_msg["lat"]),
+                            parseFloat(received_msg["lon"])),
+                    map: map,
+                    title: 'Hello World!'
+                });
+                markers.push(marker);
                 generate();
             };
 
@@ -97,10 +123,25 @@
             heatmap.setMap(map);
         }
         google.maps.event.addDomListener(window, 'load', initialize);
+        function init() {
+            //click function
+            $("#food").click(function () {
+                getdata("food");
+            });
+            $("#music").click(function () {
+                getdata("music");
+            });
+            $("#sport").click(function () {
+                getdata("sport");
+            })
+            $("#all_category").click(function () {
+                getdata("all");
+            });;
+        }
     </script>
 </head>
 
-<body>
+<body onload="init()">
 <div class="row">
     <div class="col-md-3" id="view_choice">
         <div class="btn-group" role="group" aria-label="...">
@@ -115,10 +156,10 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#">Food</a></li>
-                    <li><a href="#">Music</a></li>
-                    <li><a href="#">Sport</a></li>
-                    <li><a href="#">health</a></li>
+                    <li><a id="all_category" href="#">All</a></li>
+                    <li><a id="food" href="#">Food</a></li>
+                    <li><a id="music" href="#">Music</a></li>
+                    <li><a id="sport" href="#">Sport</a></li>
                 </ul>
             </div>
         </div>

@@ -35,14 +35,19 @@ public class RdsServlet extends HttpServlet{
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        LinkedList <Tweet> tweetList = null;
+        resp.setHeader("Content-type", "application/json");
         Gson gson = new Gson();
+        String category = req.getParameter("type");
+        if (category == null) {
+            resp.getWriter().print(gson.toJson(new LinkedList<String>()));
+            return;
+        }
+        LinkedList <Tweet> tweetList = null;
         try {
-            tweetList = rds.getAll();
+            tweetList = rds.getByCategory(category);
         }
         catch (Exception e) {
         }
-        resp.setHeader("Content-type", "application/json");
         LinkedList <HashMap <String, String> > list = new LinkedList<HashMap<String, String>>();
         for (Tweet item: tweetList) {
             list.add(item.toMap());

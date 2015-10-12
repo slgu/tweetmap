@@ -35,8 +35,8 @@ public class TweetStream {
         }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("KmnXvt87AkTr72AJ1CIoNsinb")
-                .setOAuthConsumerSecret("kDCei4twkdNd6kcJaMAVaF6viKY0pqyfxaWvJ5PSvyGtxGnR8o")
+                .setOAuthConsumerKey("BSBgYKwpPGXAF02siIF26BQGn")
+                .setOAuthConsumerSecret("ysYSI0s60Mqkz6nKzp78RBgVyS3aXWfvGOLcVf1SsrjjaaDDsZ")
                 .setOAuthAccessToken("1302870493-9OKfaOYCscgiOPZw9i2vLuEsaaY5iyI7noL3hIN")
                 .setOAuthAccessTokenSecret("F41VB5udxlqcDHpn884HntFMdrI6OrrZwMfIWShzImMkI");
         /**/
@@ -111,7 +111,8 @@ public class TweetStream {
         //Some track
         query.track(new String[]{"food","sport","music","tech"});
         //just America
-        query.locations(new double[][]{{-124.077338, 28.555795,},{-68.969915,48.589491}});
+        //try new york
+        query.locations(new double[][]{{-74.021177, 40.703283}, {-73.928416, 40.811226}});
         twitterStream.filter(query);
     }
     public static void main(String [] args) throws IOException{
