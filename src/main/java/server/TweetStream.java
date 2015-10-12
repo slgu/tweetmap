@@ -19,15 +19,8 @@ public class TweetStream {
     static public BlockingDeque <Tweet> queue = new LinkedBlockingDeque<Tweet>();
     static boolean flg = false;
     static int MAXN_LENGTH = 1000;
-    static {
-        try {
-            initService();
-        }
-        catch (Exception e) {
-
-        }
-    }
     public static void initService() throws IOException{
+        System.out.println("init service");
         if (flg)
             return;
         if (!flg) {
@@ -35,8 +28,8 @@ public class TweetStream {
         }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("BSBgYKwpPGXAF02siIF26BQGn")
-                .setOAuthConsumerSecret("ysYSI0s60Mqkz6nKzp78RBgVyS3aXWfvGOLcVf1SsrjjaaDDsZ")
+                .setOAuthConsumerKey("wlaK8GHkuo4I0JibjZP1Locuy")
+                .setOAuthConsumerSecret("WV49ku5YdWY3r4pUJJXkcEy0ERM6ZIk9wk7KnzELRVP4fGCVo2")
                 .setOAuthAccessToken("1302870493-9OKfaOYCscgiOPZw9i2vLuEsaaY5iyI7noL3hIN")
                 .setOAuthAccessTokenSecret("F41VB5udxlqcDHpn884HntFMdrI6OrrZwMfIWShzImMkI");
         /**/
@@ -116,7 +109,6 @@ public class TweetStream {
         twitterStream.filter(query);
     }
     public static void main(String [] args) throws IOException{
-        TweetStream.initService();
         while (true) {
         }
     }

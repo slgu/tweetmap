@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.ArrayList;
+import java.util.*;
 
 import com.google.gson.Gson;
 import db.Tweet;
@@ -15,9 +15,7 @@ import org.apache.catalina.websocket.WsOutbound;
 import server.TweetStream;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -27,47 +25,61 @@ import javax.websocket.server.ServerEndpoint;
 @ServerEndpoint("/push")
 public class PushServlet {
     //all clients
-    private static Set <Session> clients =
-            Collections.synchronizedSet(new HashSet<Session>());
+    private static ConcurrentHashMap <Session, Integer> clients = new
+            ConcurrentHashMap<Session, Integer>();
     private static Thread t;
     static {
-        //load TweetStream
+        //load TweetStream and init it
         try {
-            Class.forName("server.TweetStream");
-
-            //worker connect tweetstream server and websocket
-            t = new Thread() {
-                @Override
-                public void run() {
-                    Tweet tweet = TweetStream.queue.pop();
+            TweetStream.initService();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        //worker connect tweetstream server and websocket
+        t = new Thread() {
+            @Override
+            public void run() {
+                while (true) {
+                    while (clients.isEmpty());
+                    Tweet tweet;
+                    try {
+                        tweet = TweetStream.queue.take();
+                    }
+                    catch (InterruptedException e) {
+                        continue;
+                    }
                     String txt = new Gson().toJson(tweet.toMap());
-                    for (Session s: clients) {
-                        //broadcast
-                        try {
-                            s.getBasicRemote().sendText(txt);
-                        }
-                        catch (IOException e) {
-
+                    System.out.println(txt);
+                    synchronized (clients) {
+                        Enumeration <Session> enumeration = clients.keys();
+                        while (enumeration.hasMoreElements()) {
+                            Session s = enumeration.nextElement();
+                            try {
+                                s.getBasicRemote().sendText(txt);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 }
-            };
-            t.start();
-        }
-        catch (ClassNotFoundException e) {
-
-        }
+            }
+        };
+        t.start();
     }
     @OnOpen
     public void onOpen(Session session) throws IOException {
-        clients.add(session);
+        clients.put(session, 1);
     }
 
+    /*
     @OnMessage
     public String echo(String message, Session session) {
         Tweet tweet = TweetStream.queue.pop();
         return new Gson().toJson(tweet.toMap());
+
     }
+    */
 
     @OnError
     public void onError(Throwable t) {
@@ -76,6 +88,11 @@ public class PushServlet {
 
     @OnClose
     public void onClose(Session session) {
+        clients.remove(session);
+    }
+    public static void main(String [] args) {
+        while (true) {
 
+        }
     }
 }

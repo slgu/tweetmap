@@ -76,7 +76,7 @@
             generate();
             heatmap.setMap(null);
             ws = new WebSocket("ws://localhost:8080/tweetmap/push");
-            window.setInterval(wssend, 4000);
+            //window.setInterval(wssend, 4000);
             ws.onopen = function()
             {
                 // Web Socket is connected, send data using send()
