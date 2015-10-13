@@ -14,7 +14,7 @@
     <script>
         //america center
         var center = new google.maps.LatLng(38.572643,-96.5236265);
-        var heat_map_data = [];
+        var heat_map_data = new google.maps.MVCArray([]);
         var map;
         var heatmap;
         var tweetData;
@@ -50,12 +50,12 @@
         }
         function getdata(category) {
             heatmap.setMap(null);
-            heat_map_data = [];
+            heat_map_data = new google.maps.MVCArray([]);
             $.get("getdata?type=" + category, function (data,status) {
                 tweetData = data;
                 for (idx in tweetData) {
                     var item = tweetData[idx];
-                    heat_map_data.push({location: new google.maps.LatLng(parseFloat(item.lat), parseFloat(item.lon)), weight: 0.5});
+                    heat_map_data.push({location: new google.maps.LatLng(parseFloat(item.lat), parseFloat(item.lon)), weight: 3});
                 }
                 heatmap = new google.maps.visualization.HeatmapLayer({
                     data: heat_map_data
@@ -72,9 +72,14 @@
             $("#category").hide();
             $("#realtime").show();
             //init realtime
+            heatmap.setMap(null);
+            heat_map_data = new google.maps.MVCArray([]);
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heat_map_data
+            });
+            heatmap.setMap(map);
             realTimeInfo = [];
             generate();
-            heatmap.setMap(null);
             ws = new WebSocket("ws://localhost:8080/tweetmap/push");
             //window.setInterval(wssend, 4000);
             ws.onopen = function()
@@ -96,13 +101,11 @@
                 if (realTimeInfo.length > 4) {
                     realTimeInfo.shift();
                 }
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(parseFloat(received_msg["lat"]),
+                heat_map_data.push({
+                    location: new google.maps.LatLng(parseFloat(received_msg["lat"]),
                             parseFloat(received_msg["lon"])),
-                    map: map,
-                    title: 'Hello World!'
+                    weight: 3
                 });
-                markers.push(marker);
                 generate();
             };
 

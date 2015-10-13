@@ -50,7 +50,7 @@ public class RdsServlet extends HttpServlet{
         }
         LinkedList <HashMap <String, String> > list = new LinkedList<HashMap<String, String>>();
         for (Tweet item: tweetList) {
-            list.add(item.toMap());
+            list.add(item.toPosMap());
         }
         resp.getWriter().print(gson.toJson(list));
     }

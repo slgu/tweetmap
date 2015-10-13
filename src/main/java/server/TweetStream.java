@@ -28,8 +28,8 @@ public class TweetStream {
         }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("wlaK8GHkuo4I0JibjZP1Locuy")
-                .setOAuthConsumerSecret("WV49ku5YdWY3r4pUJJXkcEy0ERM6ZIk9wk7KnzELRVP4fGCVo2")
+                .setOAuthConsumerKey("gRUFCWO8bNpvGUj43mWBQqD4G")
+                .setOAuthConsumerSecret("BlDaYWeUlCgD3ixXFFS9ngscRH2A7c2Qi2L381XPcgpOZi5urJ")
                 .setOAuthAccessToken("1302870493-9OKfaOYCscgiOPZw9i2vLuEsaaY5iyI7noL3hIN")
                 .setOAuthAccessTokenSecret("F41VB5udxlqcDHpn884HntFMdrI6OrrZwMfIWShzImMkI");
         /**/

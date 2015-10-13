@@ -72,6 +72,13 @@ public class Tweet {
         res.put("category", category);
         return res;
     }
+
+    public HashMap <String, String> toPosMap() {
+        HashMap <String, String> res = new HashMap<String, String>();
+        res.put("lon",String.valueOf(lontitude));
+        res.put("lat",String.valueOf(latitude));
+        return res;
+    }
     private double lontitude;
     private double latitude;
     private String id;
