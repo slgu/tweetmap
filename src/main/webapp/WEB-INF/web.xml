@@ -12,4 +12,12 @@
         <servlet-name>RdsServelet</servlet-name>
         <url-pattern>/getdata</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PushServlet</servlet-name>
+        <servlet-class>servlet.PushServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PushServlet</servlet-name>
+        <url-pattern>/push</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -122,6 +122,32 @@ public class Rds {
         }
         return resultList;
     }
+    public LinkedList <Tweet> searchByKeyWord(String keyword) throws SQLException{
+        Statement st = conn.createStatement();
+        String str = String.format(
+                "SELECT * FROM %s WHERE %s ILIKE",
+                TABLE_NAME, TEXT_FIELD) + " '%" + keyword + "%'";
+        System.out.println(str);
+        ResultSet set = st.executeQuery(str);
+        LinkedList <Tweet> resultList = new LinkedList<Tweet>();
+        while(set.next()) {
+            Tweet t = new Tweet();
+            try {
+                t.setCreateTime(set.getDate(1));
+                t.setId(set.getString(2));
+                t.setUserName(set.getString(3));
+                t.setText(set.getString(4));
+                t.setLontitude(Double.parseDouble(set.getString(5)));
+                t.setLatitude(Double.parseDouble(set.getString(6)));
+                t.setCategory(set.getString(7));
+            }
+            catch (Exception e) {
+                continue;
+            }
+            resultList.add(t);
+        }
+        return resultList;
+    }
     public void clearDb() throws SQLException{
         Statement st = conn.createStatement();
         st.execute(String.format("delete from %s", TABLE_NAME));
@@ -191,6 +217,7 @@ public class Rds {
         Rds rds = new Rds();
         try {
             rds.init();
+            //System.out.println(rds.searchByKeyWord("m").size());
             //System.out.println(rds.getAll().size());
             //rds.clearDb();
             //rds.loadFromLocal("data/food.txt", "food");

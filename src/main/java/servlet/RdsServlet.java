@@ -44,7 +44,12 @@ public class RdsServlet extends HttpServlet{
         }
         LinkedList <Tweet> tweetList = null;
         try {
-            tweetList = rds.getByCategory(category);
+            if (category.equals("all")) {
+                tweetList = rds.getAll();
+            }
+            else {
+                tweetList = rds.searchByKeyWord(category);
+            }
         }
         catch (Exception e) {
         }

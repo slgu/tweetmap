@@ -2,13 +2,10 @@ package server;
 
 import db.Tweet;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.logging.*;
-import java.util.logging.Logger;
 
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
@@ -28,8 +25,8 @@ public class TweetStream {
         }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("gRUFCWO8bNpvGUj43mWBQqD4G")
-                .setOAuthConsumerSecret("BlDaYWeUlCgD3ixXFFS9ngscRH2A7c2Qi2L381XPcgpOZi5urJ")
+                .setOAuthConsumerKey("TemFQxpLeS9gS9jTYMM2OzZFC")
+                .setOAuthConsumerSecret("NHg8ETFPQo2sFhHiERGx5n0Ihc6s2vpQUa3BrjJIH1MkxIbSrl")
                 .setOAuthAccessToken("1302870493-9OKfaOYCscgiOPZw9i2vLuEsaaY5iyI7noL3hIN")
                 .setOAuthAccessTokenSecret("F41VB5udxlqcDHpn884HntFMdrI6OrrZwMfIWShzImMkI");
         /**/
@@ -103,9 +100,10 @@ public class TweetStream {
         query.language(new String[]{"en"});
         //Some track
         query.track(new String[]{"food","sport","music","tech"});
-        //just America
         //try new york
-        query.locations(new double[][]{{-74.021177, 40.703283}, {-73.928416, 40.811226}});
+        //query.locations(new double[][]{{-74.021177, 40.703283}, {-73.928416, 40.811226}});
+        //just America
+        query.locations(new double[][]{{-124.384632, 27.936095}, {-73.847522, 49.396611}});
         twitterStream.filter(query);
     }
     public static void main(String [] args) throws IOException{

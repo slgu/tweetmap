@@ -45,14 +45,17 @@
                 ws.close();
             }
             removeMarker();
+            heatmap.setMap(null);
             $("#category").show();
             $("#realtime").hide();
         }
         function getdata(category) {
-            heatmap.setMap(null);
             heat_map_data = new google.maps.MVCArray([]);
+            heatmap.setMap(null);
+            alert("begin to get data from RDS");
             $.get("getdata?type=" + category, function (data,status) {
                 tweetData = data;
+                alert("begin to rendering the map");
                 for (idx in tweetData) {
                     var item = tweetData[idx];
                     heat_map_data.push({location: new google.maps.LatLng(parseFloat(item.lat), parseFloat(item.lon)), weight: 3});
@@ -61,6 +64,7 @@
                     data: heat_map_data
                 });
                 heatmap.setMap(map);
+                alert("rendering done");
             } );
         }
         function wssend() {
@@ -80,7 +84,7 @@
             heatmap.setMap(map);
             realTimeInfo = [];
             generate();
-            ws = new WebSocket("ws://localhost:8080/tweetmap/push");
+            ws = new WebSocket("ws://" + window.location.host + "/push");
             //window.setInterval(wssend, 4000);
             ws.onopen = function()
             {

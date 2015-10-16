@@ -32,11 +32,11 @@ public class ElasticBean {
         this.envName = envName;
         this.envDesc = envDesc;
     }
+
     public void setup() throws IOException {
         //create application
         eb.createApplication(new CreateApplicationRequest().
                 withApplicationName(appName).withDescription(appDesc));
-
 
         //create environment
         eb.createEnvironment(new CreateEnvironmentRequest().withEnvironmentName(envName)
@@ -95,7 +95,7 @@ public class ElasticBean {
             System.out.println("init sdk");
             proxyer.init();
             System.out.println("set info");
-            proxyer.setinfo("tweetmap1", "slgu@tweetmap", "tomcat71", "slgu@tomcat7");
+            proxyer.setinfo("tweetmap", "slgu@tweetmap", "tomcat7", "slgu@tomcat7");
             System.out.println("begin setup");
             proxyer.setup();
             //wait for ready
