@@ -25,8 +25,8 @@ public class TweetStream {
         }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("TemFQxpLeS9gS9jTYMM2OzZFC")
-                .setOAuthConsumerSecret("NHg8ETFPQo2sFhHiERGx5n0Ihc6s2vpQUa3BrjJIH1MkxIbSrl")
+                .setOAuthConsumerKey("HL3AMQvzQJ6jy4TKNi7hY0M1p")
+                .setOAuthConsumerSecret("jI3249wsx0ZIC5GR0ZpDxkfkhOTOLMzfRHF76o6Fzf0lRPk4UH")
                 .setOAuthAccessToken("1302870493-9OKfaOYCscgiOPZw9i2vLuEsaaY5iyI7noL3hIN")
                 .setOAuthAccessTokenSecret("F41VB5udxlqcDHpn884HntFMdrI6OrrZwMfIWShzImMkI");
         /**/
@@ -107,7 +107,9 @@ public class TweetStream {
         twitterStream.filter(query);
     }
     public static void main(String [] args) throws IOException{
+        TweetStream.initService();
         while (true) {
+
         }
     }
 }

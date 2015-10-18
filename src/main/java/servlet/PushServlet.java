@@ -1,5 +1,7 @@
 package servlet;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.rmi.server.ExportException;
 import java.util.*;
 
 import com.google.gson.Gson;
@@ -17,7 +19,6 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/push")
 public class PushServlet extends HttpServlet {
-
 
     //all clients
     private static ConcurrentHashMap <Session, Integer> clients = new
@@ -67,15 +68,6 @@ public class PushServlet extends HttpServlet {
         clients.put(session, 1);
     }
 
-    /*
-    @OnMessage
-    public String echo(String message, Session session) {
-        Tweet tweet = TweetStream.queue.pop();
-        return new Gson().toJson(tweet.toMap());
-
-    }
-    */
-
     @OnError
     public void onError(Throwable t) {
         t.printStackTrace();
@@ -84,10 +76,5 @@ public class PushServlet extends HttpServlet {
     @OnClose
     public void onClose(Session session) {
         clients.remove(session);
-    }
-    public static void main(String [] args) {
-        while (true) {
-
-        }
     }
 }

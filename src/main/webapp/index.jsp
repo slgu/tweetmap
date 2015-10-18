@@ -84,7 +84,7 @@
             heatmap.setMap(map);
             realTimeInfo = [];
             generate();
-            ws = new WebSocket("ws://" + window.location.host + "/push");
+            ws = new WebSocket("ws://localhost:8080/tweetmap/push");
             //window.setInterval(wssend, 4000);
             ws.onopen = function()
             {
