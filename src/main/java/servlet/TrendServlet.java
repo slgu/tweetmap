@@ -33,11 +33,13 @@ public class TrendServlet extends HttpServlet {
             rds.init();
             LinkedList<Tweet> res = rds.getSample(100);
             int n = res.size();
-            String [] texts = new String [n];
-            for (int i = 0; i < n; ++i) {
-                texts[i] = res.get(i).getText();
+            StringBuilder builder = new StringBuilder();
+            builder.append(res.get(0).getText());
+            for (int i = 1; i < n; ++i) {
+                builder.append(" ");
+                builder.append(res.get(i).getText());
             }
-            String textPara = String.join(" ", texts);
+            String textPara = builder.toString();
             client.setAPIKey(apiKey);
             final AbstractCall<KeywordAlchemyEntity> authorCall = new RankedKeywordsCall(new CallTypeText(textPara));
             Response<KeywordAlchemyEntity> resp = client.call(authorCall);

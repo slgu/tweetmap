@@ -18,6 +18,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>TrendServlet</servlet-name>
-        <url-pattern>/trend</url-pattern>
+        <url-pattern>/showtrend</url-pattern>
     </servlet-mapping>
 </web-app>

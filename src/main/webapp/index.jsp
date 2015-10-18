@@ -149,9 +149,9 @@
         function showtrend() {
             alert("begin get trend");
             $("#trendtxt").html("");
-            $.get("trend", function (data,status) {
+            $.get("showtrend", function (data,status) {
+                console.log(data);
                 var keywordList = JSON.parse(data);
-
                 var list = $("<ul/>");
                 for (idx in keywordList) {
                     $("<li/>").text(keywordList[idx]).appendTo(list);
