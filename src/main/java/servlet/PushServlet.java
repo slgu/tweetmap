@@ -1,7 +1,5 @@
 package servlet;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.rmi.server.ExportException;
 import java.util.*;
 
 import com.google.gson.Gson;
@@ -10,15 +8,11 @@ import server.TweetStream;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/push")
-public class PushServlet extends HttpServlet {
+public class PushServlet {
 
     //all clients
     private static ConcurrentHashMap <Session, Integer> clients = new

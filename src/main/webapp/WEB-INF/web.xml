@@ -5,19 +5,19 @@
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
-        <servlet-name>RdsServelet</servlet-name>
+        <servlet-name>RdsServlet</servlet-name>
         <servlet-class>servlet.RdsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>RdsServelet</servlet-name>
+        <servlet-name>RdsServlet</servlet-name>
         <url-pattern>/getdata</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>PushServlet</servlet-name>
-        <servlet-class>servlet.PushServlet</servlet-class>
+        <servlet-name>TrendServlet</servlet-name>
+        <servlet-class>servlet.TrendServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>PushServlet</servlet-name>
-        <url-pattern>/push</url-pattern>
+        <servlet-name>TrendServlet</servlet-name>
+        <url-pattern>/trend</url-pattern>
     </servlet-mapping>
 </web-app>

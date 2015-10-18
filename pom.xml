@@ -55,6 +55,11 @@
           <artifactId>twitter4j-stream</artifactId>
           <version>4.0.4</version>
       </dependency>
+      <dependency>
+          <groupId>com.likethecolor</groupId>
+          <artifactId>alchemy</artifactId>
+          <version>1.1.6</version>
+      </dependency>
   </dependencies>
   <build>
     <finalName>tweetmap</finalName>

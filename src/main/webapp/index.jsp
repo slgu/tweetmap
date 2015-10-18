@@ -48,6 +48,7 @@
             heatmap.setMap(null);
             $("#category").show();
             $("#realtime").hide();
+            $("#trend").show();
         }
         function getdata(category) {
             heat_map_data = new google.maps.MVCArray([]);
@@ -75,6 +76,7 @@
         function realtime() {
             $("#category").hide();
             $("#realtime").show();
+            $("#trend").hide();
             //init realtime
             heatmap.setMap(null);
             heat_map_data = new google.maps.MVCArray([]);
@@ -84,7 +86,8 @@
             heatmap.setMap(map);
             realTimeInfo = [];
             generate();
-            ws = new WebSocket("ws://localhost:8080/tweetmap/push");
+            //websocket server
+            ws = new WebSocket("ws://54.88.35.60:8080/tweetmap/push");
             //window.setInterval(wssend, 4000);
             ws.onopen = function()
             {
@@ -97,8 +100,6 @@
                 var received_msg = JSON.parse(evt.data);
                 var lat = parseFloat(received_msg.lat);
                 var lon = parseFloat(received_msg.lon);
-                console.log(received_msg["text"]);
-                console.log(received_msg["username"]);
                 var string = received_msg["username"] + " " + received_msg["lat"] + " " +
                                 received_msg["lon"];
                 realTimeInfo.push([received_msg["text"], string]);
@@ -145,6 +146,19 @@
                 getdata("all");
             });;
         }
+        function showtrend() {
+            alert("begin get trend");
+            $("#trendtxt").html("");
+            $.get("trend", function (data,status) {
+                var keywordList = JSON.parse(data);
+
+                var list = $("<ul/>");
+                for (idx in keywordList) {
+                    $("<li/>").text(keywordList[idx]).appendTo(list);
+                }
+                list.appendTo($("#trendtxt"));
+            } );
+        }
     </script>
 </head>
 
@@ -168,6 +182,12 @@
                     <li><a id="music" href="#">Music</a></li>
                     <li><a id="sport" href="#">Sport</a></li>
                 </ul>
+            </div>
+        </div>
+        <div id="trend">
+            <button class="btn btn-default" onclick="showtrend()">showTrend</button>
+            <div id="trendtxt">
+
             </div>
         </div>
         <div id="realtime" style="display: none">

@@ -1,5 +1,4 @@
 package db;
-
 import com.amazonaws.services.simpleworkflow.flow.Suspendable;
 import javafx.scene.control.Tab;
 
@@ -100,6 +99,30 @@ public class Rds {
         }
         return resultList;
     }
+
+    public LinkedList <Tweet> getSample(int number) throws SQLException {
+        Statement st = conn.createStatement();
+        ResultSet set = st.executeQuery(String.format("select * from %s limit %d", TABLE_NAME, number));
+        LinkedList <Tweet> resultList = new LinkedList<Tweet>();
+        while(set.next()) {
+            Tweet t = new Tweet();
+            try {
+                t.setCreateTime(set.getDate(1));
+                t.setId(set.getString(2));
+                t.setUserName(set.getString(3));
+                t.setText(set.getString(4));
+                t.setLontitude(Double.parseDouble(set.getString(5)));
+                t.setLatitude(Double.parseDouble(set.getString(6)));
+                t.setCategory(set.getString(7));
+            }
+            catch (Exception e) {
+                continue;
+            }
+            resultList.add(t);
+        }
+        return resultList;
+    }
+
     public LinkedList <Tweet> getAll() throws SQLException{
         Statement st = conn.createStatement();
         ResultSet set = st.executeQuery(String.format("select * from %s", TABLE_NAME));
@@ -217,8 +240,10 @@ public class Rds {
         Rds rds = new Rds();
         try {
             rds.init();
-            //System.out.println(rds.searchByKeyWord("m").size());
-            //System.out.println(rds.getAll().size());
+            LinkedList <Tweet> res = rds.getSample(10);
+            for (Tweet tweet: res) {
+                System.out.println(tweet.getText());
+            }
             //rds.clearDb();
             //rds.loadFromLocal("data/food.txt", "food");
             //rds.loadFromLocal("data/sport.txt", "sport");
