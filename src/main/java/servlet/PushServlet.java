@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.*;
 
 import com.google.gson.Gson;
+import db.Rds;
 import db.Tweet;
 import server.TweetStream;
 
@@ -13,7 +14,6 @@ import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/push")
 public class PushServlet {
-
     //all clients
     private static ConcurrentHashMap <Session, Integer> clients = new
             ConcurrentHashMap<Session, Integer>();
@@ -31,7 +31,6 @@ public class PushServlet {
             @Override
             public void run() {
                 while (true) {
-                    while (clients.isEmpty());
                     Tweet tweet;
                     try {
                         tweet = TweetStream.queue.take();
@@ -51,6 +50,13 @@ public class PushServlet {
                                 e.printStackTrace();
                             }
                         }
+                    }
+                    try {
+                        //avoid too fast stream
+                        sleep(400);
+                    }
+                    catch (InterruptedException e) {
+
                     }
                 }
             }

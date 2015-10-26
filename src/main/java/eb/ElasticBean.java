@@ -21,7 +21,7 @@ public class ElasticBean {
     private static final String appPath = "/Users/slgu1/aws/tweetmap/target/tweetmap.war";
     public void init() throws IOException{
         credentials = new PropertiesCredentials(
-                ElasticBean.class.getResourceAsStream("AwsCredentials.properties"));
+                ElasticBean.class.getResourceAsStream("rootkey.csv"));
         PropertyConfigurator.configure("log4j.properties");
         eb = new AWSElasticBeanstalkClient(credentials);
         s3 = new AmazonS3Client();
@@ -63,6 +63,7 @@ public class ElasticBean {
             if (flg)
                 break;
         }
+
         //create S3 storage to upload the web files
         File f = new File(appPath);
         String fileName = f.getName();

@@ -87,7 +87,7 @@
             realTimeInfo = [];
             generate();
             //websocket server
-            ws = new WebSocket("ws://54.88.35.60:8080/tweetmap/push");
+            ws = new WebSocket("ws://54.209.200.143:8080/tweetmap/push");
             //window.setInterval(wssend, 4000);
             ws.onopen = function()
             {
@@ -141,10 +141,7 @@
             });
             $("#sport").click(function () {
                 getdata("sport");
-            })
-            $("#all_category").click(function () {
-                getdata("all");
-            });;
+            });
         }
         function showtrend() {
             alert("begin get trend");
@@ -177,7 +174,6 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a id="all_category" href="#">All</a></li>
                     <li><a id="food" href="#">Food</a></li>
                     <li><a id="music" href="#">Music</a></li>
                     <li><a id="sport" href="#">Sport</a></li>
